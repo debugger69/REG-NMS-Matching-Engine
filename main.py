@@ -1,4 +1,5 @@
 from fastapi import FastAPI, WebSocket
+from fastapi.responses import RedirectResponse
 from api import rest_api, websocket_api
 from engine.matching_engine import MatchingEngine
 from engine.persistence import PersistenceManager
@@ -50,6 +51,10 @@ async def websocket_endpoint(websocket: WebSocket):
         logging.error(f"WebSocket error: {str(e)}")
     finally:
         ws_manager.disconnect(websocket)
+
+@app.get("/")
+def redirect_to_docs():
+    return RedirectResponse(url="/docs")
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
